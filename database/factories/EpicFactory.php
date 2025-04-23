@@ -3,11 +3,12 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\User;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\TaskModel>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Epic>
  */
-class TaskModelFactory extends Factory
+class EpicFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -16,8 +17,11 @@ class TaskModelFactory extends Factory
      */
     public function definition(): array
     {
+        $user = User::all()->random(1)->first();
+
         return [
-            //
+            'title' => fake()->words(3, true),
+            'created_by' => $user->id,
         ];
     }
 }

@@ -11,8 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('task_models', function (Blueprint $table) {
+        Schema::create('task_comments', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('task_id')->constrained(table: 'tasks');
+            $table->text('comment');
+            $table->foreignId('created_by')->constrained(table: 'users');
             $table->timestamps();
         });
     }
@@ -22,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('task_models');
+        Schema::dropIfExists('task_comments');
     }
 };
