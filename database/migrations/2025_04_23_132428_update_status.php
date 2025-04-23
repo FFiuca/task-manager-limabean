@@ -18,13 +18,18 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table(static::$table, function(Blueprint $table){
-
-            if(Schema::hasColumn(table: static::$table, column: 'created_by')){
-                $table->dropForeign(index: ['created_by']);
-                $table->dropColumn(columns: 'created_by');
+             // Check if the column exists
+             if (Schema::hasColumn('statuses', 'created_by')) {
+                // Drop the foreign key constraint if it exists
+                $table->dropForeign(['created_by']);
+                // Drop the column
+                $table->dropColumn('created_by');
             }
-            $table->foreignId(column: 'created_by')->nullable()->constrained(table: 'users')->change();
+
+            // Re-add the column as nullable and add the foreign key constraint
+            $table->foreignId('created_by')->nullable()->constrained('users');
         });
+
     }
 
     /**
@@ -32,8 +37,11 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table(static::$table, function(Blueprint $table){
-            $table->foreignId(column: 'created_by')->constrained(table: 'users')->change();
+        Schema::table('statuses', function (Blueprint $table) {
+            // Drop the foreign key constraint if it exists
+            $table->dropForeign(['created_by']);
+            // Drop the column
+            $table->dropColumn('created_by');
         });
     }
 };

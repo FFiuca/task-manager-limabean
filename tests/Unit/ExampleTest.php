@@ -2,15 +2,27 @@
 
 namespace Tests\Unit;
 
-use PHPUnit\Framework\TestCase;
+use App\Models\User;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class ExampleTest extends TestCase
 {
-    /**
-     * A basic test example.
-     */
-    public function test_that_true_is_true(): void
-    {
-        $this->assertTrue(true);
+
+    use DatabaseMigrations;
+    // use RefreshDatabase;
+
+
+    public function setUp(): void{
+        parent::setUp();
+
+        $this->artisan('db:seed', ['--class' => 'DatabaseSeeder']);
+    }
+
+    public function test_connect_db_testing(){
+        $user = User::count();
+
+        $this->assertTrue($user > 0);
     }
 }
