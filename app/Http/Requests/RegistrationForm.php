@@ -12,7 +12,7 @@ class RegistrationForm extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -26,7 +26,7 @@ class RegistrationForm extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'confirm_password' => ['required', 'string', 'min:8', Rule::same('password')],
+            'confirm_password' => ['required', 'string', 'min:8', Rule::prohibitedIf(fn() => $this->input('password') !== $this->input('confirm_password'))],
         ];
     }
 }
