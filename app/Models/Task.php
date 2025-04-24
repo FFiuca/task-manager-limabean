@@ -7,11 +7,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Task extends Model
 {
     /** @use HasFactory<\Database\Factories\TaskFactory> */
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $guarded = ['id'];
 
@@ -41,6 +43,10 @@ class Task extends Model
 
     public function userWhoCommented(): BelongsToMany{
         return $this->belongsToMany(User::class, TaskComment::class,  'task_id', 'created_by');
+    }
+
+    public function taskComment(): HasMany{
+        return $this->hasMany(TaskComment::class, 'id', 'task_id');
     }
 
 
