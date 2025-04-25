@@ -28,8 +28,7 @@ class AuthenticationController extends Controller
         private AuthentificationFunction $authentificationFunction,
         private MainHelper $mainHelper
     ){
-        // $this->authentificationFunction = $authentificationFunction;
-        // $this->mainHelper = $mainHelper;
+
     }
 
      /**

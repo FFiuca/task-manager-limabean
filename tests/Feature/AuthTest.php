@@ -29,8 +29,6 @@ class AuthTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertJsonPath('data.name', 'Test User');
-
-        // dump($response->getContent());
     }
 
     public function test_login_user(){
@@ -43,8 +41,6 @@ class AuthTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertJsonPath('data.token', fn($token): bool => isset($token));
-
-        dump($response->getContent());
     }
 
 }

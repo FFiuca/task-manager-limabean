@@ -31,7 +31,6 @@ class EpicTest extends TestCase
 
         $response = $this->getJson(route('epic.index'));
 
-        // dump($response->json());
         $response->assertStatus(200);
         $response->assertJsonCount(10, 'data.data');
     }
@@ -44,10 +43,8 @@ class EpicTest extends TestCase
 
         $response = $this->postJson(route('epic.store'), $data);
 
-        // dump($response->json());
         $response->assertStatus(200);
         $response->assertJsonPath('data.title', 'New Epic');
-        // $this->assertDatabaseHas('epics', ['title' => 'New Epic']);
     }
 
     public function test_store_epic_validation_error()
@@ -60,7 +57,6 @@ class EpicTest extends TestCase
 
         $response->assertStatus(400);
         $response->assertJsonPath('message.title', fn($message): bool => isset($message));
-        // dd($response->json());
     }
 
     public function test_show_epic()
@@ -68,7 +64,6 @@ class EpicTest extends TestCase
         $epic = Epic::factory()->create();
 
         $response = $this->getJson(route('epic.show', $epic->id));
-        // dump($response->json(), $epic->id);
 
         $response->assertStatus(200);
         $response->assertJsonPath('data.title', $epic->title);
@@ -83,7 +78,7 @@ class EpicTest extends TestCase
         ];
 
         $response = $this->putJson(route('epic.update', $epic->id), $data);
-        // dd($response->json());
+
         $response->assertStatus(200);
         $response->assertJsonPath('data.title', 'Updated Epic Title');
         $this->assertDatabaseHas('epics', ['id' => $epic->id, 'title' => 'Updated Epic Title']);

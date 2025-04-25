@@ -17,7 +17,6 @@ class EpicFunction extends CRUDAbs{
             'created_by' => request()->user()->id,
         ]);
 
-        // dump($epic);
         DB::commit();
         return $epic->toArray();
     }
@@ -33,7 +32,7 @@ class EpicFunction extends CRUDAbs{
 
         $epic->title = $data['title'];
         $epic->save();
-        // dump($epic);
+
         DB::commit();
         return $epic->toArray();
     }
@@ -52,6 +51,7 @@ class EpicFunction extends CRUDAbs{
         DB::commit();
         return true;
     }
+
     public function detail(int $id): array|int|string
     {
         $epic = Epic::where('id', $id)->with([

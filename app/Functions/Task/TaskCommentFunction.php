@@ -18,7 +18,6 @@ class TaskCommentFunction{
             'created_by' => request()->user()->id,
         ]);
 
-        // dump($epic);
         DB::commit();
         return $epic->toArray();
     }
@@ -34,7 +33,7 @@ class TaskCommentFunction{
 
         $epic->comment = $data['comment'];
         $epic->save();
-        // dump($epic);
+
         DB::commit();
         return $epic->toArray();
     }

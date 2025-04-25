@@ -17,7 +17,6 @@ class TaskFunction extends CRUDAbs{
             'created_by' => request()->user()->id,
         ]);
 
-        // dump($task);
         DB::commit();
         return $task->toArray();
     }
@@ -32,7 +31,7 @@ class TaskFunction extends CRUDAbs{
         }
 
         $update = Task::where('id', $id)->update($data);
-        // dump($task);
+
         DB::commit();
         return $task->refresh()->toArray();
     }

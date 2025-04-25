@@ -32,7 +32,6 @@ class TaskTest extends TestCase
 
         $response = $this->getJson(route(name: 'task.index'));
 
-        // dump($response->json());
         $response->assertStatus(200);
         $response->assertJsonCount(10, 'data.data');
     }
