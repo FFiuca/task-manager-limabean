@@ -30,22 +30,16 @@ Ensure you have the following installed:
    cd task-manager
    ```
 
-2. **Environment Configuration**:
-   Copy the `.env.example` file to `.env` and update the environment variables as needed:
-   ```bash
-   cp .env.example .env
-   ```
-
-3. **Build and Start the Containers**:
+2. **Build and Start the Containers**:
    Use Docker Compose to build and start the containers:
    ```bash
    docker-compose up --build
    ```
 
-4. **Run Database Migrations and Seeding**:
+3. **Run Database Migrations and Seeding**:
    The `prepare_app` service will automatically run migrations and seed the database when the containers are started.
 
-5. **Access the Application**:
+4. **Access the Application**:
    - API Base URL: [http://localhost:8000](http://localhost:8000)
    - Swagger Documentation: [http://localhost:8000/api/documentation](http://localhost:8000/api/documentation)
 
