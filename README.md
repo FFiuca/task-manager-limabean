@@ -42,6 +42,7 @@ Ensure you have the following installed:
 4. **Access the Application**:
    - API Base URL: [http://localhost:8000](http://localhost:8000)
    - Swagger Documentation: [http://localhost:8000/api/documentation](http://localhost:8000/api/documentation)
+   - In this project, have already user created with credential `email: test@example.com` and `password: password`. You can create manually by swagger UI.
 
 ---
 
