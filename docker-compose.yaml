@@ -1,0 +1,121 @@
+version: '3.8'
+
+services:
+  app:
+    image: ffiuca/test-limabean:latest
+    container_name: laravel_app
+    ports:
+      - "9000:9000"
+    networks:
+      - laravel
+    environment:
+      APP_ENV: local
+      APP_DEBUG: true
+      APP_KEY: base64:48iazqHyEnk8BxATdVp8kq54fHxqt8ZFUvfLGt3wVeU=
+      DB_CONNECTION: mysql
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: task-manager-limabean
+      DB_USERNAME: root
+      DB_PASSWORD: root
+
+  nginx:
+    image: nginx:latest
+    container_name: laravel_nginx
+    ports:
+      - "8000:80"
+    volumes:
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+    networks:
+      - laravel
+
+  db:
+    image: mysql:8
+    container_name: laravel_db
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: task-manager-limabean
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - laravel
+
+  prepare_app:
+    image: ffiuca/test-limabean:latest
+    container_name: prepare_app
+    depends_on:
+      - db
+    networks:
+      - laravel
+    environment:
+      APP_ENV: local
+      APP_DEBUG: true
+      APP_KEY: base64:48iazqHyEnk8BxATdVp8kq54fHxqt8ZFUvfLGt3wVeU=
+      DB_CONNECTION: mysql
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: task-manager-limabean
+      DB_USERNAME: root
+      DB_PASSWORD: root
+    command: >
+      sh -c "
+      ./docker/wait-for-it.sh db 3306 php artisan migrate --force &&
+      ./docker/wait-for-it.sh db 3306 php artisan db:seed --force
+      "
+
+  mysql-testing:
+    image: mysql:8
+    container_name: laravel_db_testing
+    restart: always
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_DATABASE: task-manager-limabean-testing
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - db_test_data:/var/lib/mysql
+    networks:
+      - laravel
+
+  migrate_and_test:
+    image: ffiuca/test-limabean:latest
+    container_name: laravel_migrate_and_test
+    depends_on:
+      - db
+      - mysql-testing
+    networks:
+      - laravel
+    environment:
+      APP_ENV: local
+      APP_DEBUG: true
+      APP_KEY: base64:48iazqHyEnk8BxATdVp8kq54fHxqt8ZFUvfLGt3wVeU=
+      DB_CONNECTION: mysql
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: task-manager-limabean
+      DB_USERNAME: root
+      DB_PASSWORD: root
+      DB_CONNECTION_TESTING: mysql-testing
+      DB_HOST_TESTING: mysql-testing
+      DB_PORT_TESTING: 3306
+      DB_DATABASE_TESTING: task-manager-limabean-testing
+      DB_USERNAME_TESTING: root
+      DB_PASSWORD_TESTING: root
+    command: >
+      sh -c "
+      ./docker/wait-for-it.sh db 3306 php artisan migrate --force &&
+      ./docker/wait-for-it.sh db 3306 php artisan db:seed --force &&
+      php artisan test
+      "
+
+networks:
+  laravel:
+
+volumes:
+  db_data:
+  db_test_data:
